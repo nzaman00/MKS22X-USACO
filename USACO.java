@@ -30,7 +30,7 @@ public class USACO{
         gridElevations[6] = elevations[r+2][c+2];
         gridElevations[7] = elevations[r][c+1];
         gridElevations[8] = elevations[r][c+2];
-      int max = gridElevations[0]
+      int max = gridElevations[0];
       for(int i = 0; i < gridElevations.length;i++){
         if(gridElevations[i] > max)
           max = gridElevations[i];
