@@ -71,10 +71,87 @@ public class USACO{
 
     return totDepth * 72 * 72;
   }
-  
-   public static int silver(String filename) throws FileNotFoundException{
-    File file = new File(filename);
-    Scanner scan = new Scanner(file);
-     return -1;
-   }
+
+  public static int silver(String filename) throws FileNotFoundException{
+     int[] moves = new int[] {1, 0, 0, 1, -1, 0, 0, -1};
+     File file = new File(filename);
+     Scanner scanner = new Scanner(file);
+     int rows = scanner.nextInt();
+     int cols = scanner.nextInt();
+     int time = scanner.nextInt();
+     scanner.nextLine();
+     int[][] map = new int[rows][cols];
+     for (int i = 0; i < rows; i++) {
+       String line = scanner.nextLine();
+       for (int j = 0; j < cols; j++) {
+         if (line.charAt(j) == '*') {
+           map[i][j] = -1;
+         }
+         if (line.charAt(j) == '.') {
+           map[i][j] = 0;
+         }
+       }
+     }
+     int startR = scanner.nextInt()-1;
+     int startC = scanner.nextInt()-1;
+     int endR = scanner.nextInt()-1;
+     int endC = scanner.nextInt()-1;
+     for (int i = 0; i < moves.length; i+=2) {
+       try {
+         if (map[startR + moves[i]][startC + moves[i+1]] != -1) {
+           map[startR + moves[i]][startC + moves[i+1]] += 1;
+         }
+       }
+       catch(Exception e) {}
+     }
+     time--;
+     boolean go;
+     if (startR + startC % 2 == 0) {
+       go = false;
+     }
+     else {
+       go = true;
+     }
+     while (time > 0) {
+       for (int r = 0; r < rows; r++) {
+         for (int c = 0; c < cols; c++) {
+           if (go) {
+             if (map[r][c] > 0) {
+               for (int i = 0; i < moves.length; i+=2) {
+                 try{
+                   if (map[r + moves[i]][c + moves[i+1]] != -1) {
+                     map[r + moves[i]][c + moves[i+1]] += map[r][c];
+                   }
+                 }
+                 catch(Exception e) {}
+               }
+               map[r][c] = 0;
+             }
+             go = false;
+           }
+           else {
+             go = true;
+           }
+         }
+         if (cols % 2 == 0) {
+           if (go) {
+             go = false;
+           }
+           else{
+             go = true;
+           }
+         }
+       }
+       time--;
+       if (!(rows % 2 == 1 && cols % 2 == 0)) {
+         if (go) {
+           go = false;
+         }
+         else{
+           go = true;
+         }
+       }
+     }
+     return map[endR][endC];
+ }
 }
